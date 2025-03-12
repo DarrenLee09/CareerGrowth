@@ -1,0 +1,10 @@
+.fade-in-section {
+    will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fade-in-section {
+        transition: none !important;
+        transform: none !important;
+    }
+}

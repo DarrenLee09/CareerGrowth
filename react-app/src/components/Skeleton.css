@@ -1,0 +1,74 @@
+.skeleton {
+    background-color: var(--bg-tertiary);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Wave Animation */
+.skeleton.wave::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.08),
+            transparent);
+    animation: wave 1.5s infinite;
+}
+
+@keyframes wave {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Pulse Animation */
+.skeleton.pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Dark Mode Adjustments */
+.dark .skeleton {
+    background-color: var(--bg-secondary);
+}
+
+.dark .skeleton.wave::after {
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent);
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+    .skeleton {
+        border: 1px solid CanvasText;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .skeleton.wave::after,
+    .skeleton.pulse {
+        animation: none;
+    }
+}
