@@ -285,10 +285,30 @@
 }
 
 .resume-preview {
-    margin-top: 1rem;
-    padding: 1rem;
-    background-color: var(--bg-tertiary);
-    border-radius: 8px;
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.resume-template {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.placeholder-text {
+    color: #666;
+    font-size: 1.1rem;
 }
 
 .analyze-button {
@@ -420,16 +440,28 @@
     border: none;
     border-radius: 8px;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    background: var(--background-secondary);
-    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    background: var(--background-secondary, #f0f2f5);
+    color: var(--text-primary, #1a202c);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tab-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tab-button.active {
-    background: var(--primary-color);
+    background: var(--primary-color, #4299e1);
     color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tab-button.active:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Resume Builder Styles */
@@ -493,20 +525,27 @@
     flex: 1;
     background: white;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 2rem;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .resume-template {
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
 
 .placeholder-text {
-    color: var(--text-secondary);
-    font-style: italic;
+    color: #666;
+    font-size: 1.1rem;
 }
 
 .builder-actions {
@@ -677,7 +716,11 @@
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
     .resume-preview {
-        background: var(--background-secondary);
+        background: #2a2a2a;
+    }
+
+    .placeholder-text {
+        color: #999;
     }
 
     .keyword-tag {
@@ -686,6 +729,157 @@
 
     .keyword-tags.missing .keyword-tag {
         background: rgba(var(--primary-rgb), 0.1);
+    }
+
+    /* Resume Builder Page Dark Mode */
+    .resume-builder {
+        background-color: var(--dark-bg-primary);
+    }
+
+    .builder-sidebar {
+        background: var(--dark-bg-secondary);
+        border: 1px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .section-list li {
+        color: var(--dark-text-primary);
+        font-weight: 500;
+    }
+
+    .section-list li:hover {
+        background: var(--dark-hover-bg);
+        color: var(--dark-text-primary);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .section-list li.active {
+        background: var(--primary-color);
+        color: white;
+        font-weight: 600;
+        box-shadow: var(--dark-shadow-md);
+    }
+
+    .resume-preview {
+        background: var(--dark-bg-secondary);
+        border: 1px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .placeholder-text {
+        color: var(--dark-text-primary);
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .ai-assistant {
+        background: var(--dark-bg-tertiary);
+        border: 1px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .ai-suggestions p {
+        color: var(--dark-text-primary);
+        opacity: 0.9;
+    }
+
+    /* Form Elements in Dark Mode */
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        background: var(--dark-bg-tertiary);
+        color: var(--dark-text-primary);
+        border: 1px solid var(--dark-border-color);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+    }
+
+    .form-group label {
+        color: var(--dark-text-primary);
+        font-weight: 500;
+    }
+
+    /* Match Score in Dark Mode */
+    .match-score {
+        background: var(--primary-color);
+        color: white;
+        font-weight: 600;
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    /* Upload Section in Dark Mode */
+    .upload-section {
+        background: var(--dark-bg-secondary);
+        border: 1px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .upload-button {
+        background: var(--primary-color);
+        color: white;
+        font-weight: 600;
+        box-shadow: var(--dark-shadow-sm);
+        transition: all 0.3s ease;
+    }
+
+    .upload-button:hover {
+        background: var(--primary-color-dark);
+        transform: translateY(-2px);
+        box-shadow: var(--dark-shadow-md);
+    }
+
+    /* Analysis Results in Dark Mode */
+    .analysis-results {
+        background: var(--dark-bg-secondary);
+        border: 1px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .score-card {
+        background: var(--dark-bg-tertiary);
+        border: 1px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .analysis-section {
+        background: var(--dark-bg-tertiary);
+        border: 1px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .analysis-section h3 {
+        color: var(--dark-text-primary);
+        font-weight: 600;
+    }
+
+    .analysis-section li {
+        color: var(--dark-text-primary);
+        opacity: 0.9;
+    }
+
+    /* Keyword Analysis in Dark Mode */
+    .keyword-analysis {
+        background: var(--dark-bg-tertiary);
+        border: 1px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+    }
+
+    .keyword-tag {
+        background: var(--dark-bg-secondary);
+        color: var(--dark-text-primary);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .keyword-tags.missing .keyword-tag {
+        background: rgba(66, 153, 225, 0.2);
+        color: var(--dark-text-primary);
+        border: 1px solid rgba(66, 153, 225, 0.3);
     }
 }
 
@@ -722,17 +916,24 @@
 .jobs-header {
     text-align: center;
     margin-bottom: 3rem;
+    padding: 2rem;
+    border-radius: 12px;
+    background: var(--bg-secondary);
 }
 
 .jobs-header h1 {
     font-size: 2.5rem;
     color: var(--text-primary);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
 }
 
 .jobs-header p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
 }
 
 .jobs-content {
@@ -1663,5 +1864,395 @@ main {
 
     .footer-section {
         text-align: center;
+    }
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+    background-color: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .modal-content {
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+    }
+
+    .modal-header {
+        border-bottom-color: var(--border-color);
+    }
+
+    .modal-close:hover {
+        background-color: var(--bg-hover);
+    }
+}
+
+.pdf-loading,
+.pdf-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+}
+
+.pdf-loading .spinner {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 1rem;
+    border: 3px solid var(--background-tertiary);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.pdf-error {
+    color: var(--text-error);
+    background: var(--bg-error);
+    border-radius: 8px;
+}
+
+.pdf-error p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.retry-button {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.retry-button:hover {
+    background: var(--primary-color-dark);
+    transform: translateY(-1px);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .pdf-error {
+        background: var(--bg-error-dark);
+    }
+}
+
+/* Dark Mode Theme Variables */
+:root {
+    --dark-bg-primary: #1a1b1e;
+    --dark-bg-secondary: #2d2e32;
+    --dark-bg-tertiary: #3a3b40;
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #e2e8f0;
+    --dark-border-color: rgba(255, 255, 255, 0.2);
+    --dark-hover-bg: #454950;
+    --dark-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --dark-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --dark-shadow-lg: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Global Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: var(--dark-bg-primary);
+        color: var(--dark-text-primary);
+    }
+
+    .page-container {
+        background-color: var(--dark-bg-primary);
+    }
+
+    /* Headings and Text */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: var(--dark-text-primary);
+    }
+
+    .page-content h1 {
+        color: var(--dark-text-primary);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    p,
+    span,
+    label,
+    li {
+        color: var(--dark-text-primary);
+    }
+
+    .page-content p {
+        color: var(--dark-text-secondary);
+    }
+
+    /* Jobs Page - Enhanced Visibility */
+    .jobs-header {
+        background: var(--dark-bg-secondary);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        padding: 3rem 2rem;
+        margin-bottom: 4rem;
+        border-radius: 16px;
+    }
+
+    .jobs-header h1 {
+        color: #ffffff;
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4),
+            0 4px 8px rgba(0, 0, 0, 0.2);
+        letter-spacing: -0.5px;
+        line-height: 1.2;
+    }
+
+    .jobs-header p {
+        color: #ffffff;
+        font-size: 1.4rem;
+        font-weight: 500;
+        line-height: 1.6;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        opacity: 0.95;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .job-card {
+        background: var(--dark-bg-secondary);
+        border: 2px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+        padding: 1.5rem;
+    }
+
+    .job-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--dark-shadow-md);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .job-title h3 {
+        color: var(--dark-text-primary);
+        font-size: 1.3rem;
+        font-weight: 700;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        margin-bottom: 0.5rem;
+    }
+
+    .company {
+        color: var(--dark-text-secondary);
+        font-weight: 500;
+    }
+
+    .job-details span {
+        color: var(--dark-text-primary);
+    }
+
+    .job-description {
+        color: var(--dark-text-primary);
+    }
+
+    /* Skills Tags with Enhanced Visibility - Based on Secondary CTA */
+    .skill-tag {
+        background: var(--dark-bg-secondary);
+        color: var(--dark-text-primary);
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        border: 2px solid var(--dark-border-color);
+        box-shadow: var(--dark-shadow-sm);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin: 0.25rem;
+    }
+
+    .skill-tag:hover {
+        background: var(--dark-hover-bg);
+        transform: translateY(-2px);
+        box-shadow: var(--dark-shadow-md);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Resume Builder and Analyzer Headings */
+    .resume-header h1,
+    .resume-analyzer h1 {
+        color: var(--dark-text-primary);
+        font-weight: 700;
+        font-size: 2.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 1rem;
+        letter-spacing: -0.5px;
+    }
+
+    .resume-header p,
+    .resume-analyzer p {
+        color: var(--dark-text-primary);
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        font-weight: 500;
+        opacity: 0.95;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Section Headers */
+    .section-header h1,
+    .section-header h2 {
+        color: var(--dark-text-primary);
+        font-weight: 700;
+        font-size: 2.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 1rem;
+        letter-spacing: -0.5px;
+    }
+
+    .section-header p {
+        color: var(--dark-text-primary);
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        font-weight: 500;
+        opacity: 0.95;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }

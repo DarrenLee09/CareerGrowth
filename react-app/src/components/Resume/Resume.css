@@ -398,3 +398,107 @@
         padding: 1rem;
     }
 }
+
+/* Upload Box Styles */
+.upload-box-container {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.upload-box {
+    width: 100%;
+    min-height: 200px;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    background-color: var(--bg-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.upload-box:hover {
+    border-color: var(--primary-color);
+    background-color: var(--bg-hover);
+}
+
+.upload-box.active {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+.upload-box.reject {
+    border-color: var(--error-color);
+    background-color: var(--error-bg);
+}
+
+.upload-content {
+    text-align: center;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.upload-box:hover .upload-icon {
+    transform: translateY(-5px);
+}
+
+.upload-text {
+    color: var(--text-primary);
+}
+
+.primary-text {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.secondary-text {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.browse-text {
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.file-info {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+}
+
+.upload-error {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    background-color: var(--error-bg);
+    color: var(--error-color);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .upload-box {
+        background-color: var(--bg-tertiary);
+    }
+
+    .upload-box:hover {
+        background-color: var(--bg-hover);
+    }
+
+    .upload-box.active {
+        background-color: rgba(var(--primary-rgb), 0.1);
+    }
+
+    .upload-box.reject {
+        background-color: rgba(var(--error-rgb), 0.1);
+    }
+}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useToast } from '../components/Toast/ToastContext';
+import UploadBox from '../components/Resume/UploadBox';
 import './Pages.css';
 
 interface ResumeAnalysis {
@@ -15,22 +16,20 @@ interface ResumeAnalysis {
 
 const Resume: React.FC = () => {
     const { showToast } = useToast();
-    const [resumeFile, setResumeFile] = useState<File | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
     const [activeTab, setActiveTab] = useState<'builder' | 'analyzer'>('builder');
+    const [showUploadModal, setShowUploadModal] = useState(false);
 
-    const handleResumeUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            if (file.type !== 'application/pdf') {
-                showToast('Please upload a PDF file', 'error');
-                return;
-            }
-            setResumeFile(file);
-            showToast('Resume uploaded successfully', 'success');
-            analyzeResume(file);
+    const handleResumeUpload = (file: File) => {
+        if (file.type !== 'application/pdf') {
+            showToast('Please upload a PDF file', 'error');
+            return;
         }
+
+        showToast('Resume uploaded successfully', 'success');
+        analyzeResume(file);
+        setShowUploadModal(false);
     };
 
     const analyzeResume = async (file: File) => {
@@ -129,13 +128,17 @@ const Resume: React.FC = () => {
                         <div className="builder-main">
                             <div className="resume-preview">
                                 <div className="resume-template">
-                                    {/* Resume template content */}
-                                    <p className="placeholder-text">Resume preview will appear here</p>
+                                    <p className="placeholder-text">Resume preview will be implemented with backend integration</p>
                                 </div>
                             </div>
                             <div className="builder-actions">
                                 <button className="action-button primary">Save Draft</button>
-                                <button className="action-button secondary">Export PDF</button>
+                                <button
+                                    className="action-button secondary"
+                                    onClick={() => setShowUploadModal(true)}
+                                >
+                                    Export PDF
+                                </button>
                                 <button className="action-button">Preview</button>
                             </div>
                         </div>
@@ -143,16 +146,11 @@ const Resume: React.FC = () => {
                 ) : (
                     <div className="resume-analyzer">
                         <div className="upload-section">
-                            <input
-                                type="file"
-                                id="resume"
-                                accept=".pdf"
-                                onChange={handleResumeUpload}
-                                style={{ display: 'none' }}
+                            <UploadBox
+                                onFileUpload={handleResumeUpload}
+                                acceptedFileTypes={['.pdf', 'application/pdf']}
+                                maxSize={5 * 1024 * 1024} // 5MB
                             />
-                            <label htmlFor="resume" className="upload-button">
-                                {resumeFile ? resumeFile.name : 'Upload Resume (PDF)'}
-                            </label>
                             {isAnalyzing ? (
                                 <div className="analyzing-indicator">
                                     <div className="spinner"></div>
@@ -216,6 +214,30 @@ const Resume: React.FC = () => {
                     </div>
                 )}
             </motion.div>
+
+            {/* Upload Modal */}
+            {showUploadModal && (
+                <div className="modal-overlay" onClick={() => setShowUploadModal(false)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>Export Resume as PDF</h2>
+                            <button
+                                className="modal-close"
+                                onClick={() => setShowUploadModal(false)}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <UploadBox
+                                onFileUpload={handleResumeUpload}
+                                acceptedFileTypes={['.pdf', 'application/pdf']}
+                                maxSize={5 * 1024 * 1024} // 5MB
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
