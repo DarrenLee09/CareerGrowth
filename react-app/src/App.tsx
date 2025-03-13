@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
 import { useTheme } from './contexts/ThemeContext';
@@ -9,7 +9,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import PageTransition from './components/PageTransition';
 import PageSkeleton from './components/PageSkeleton';
 import ToastProvider from './components/Toast/ToastContext';
-import FadeInSection from './components/FadeInSection';
 import './App.css';
 
 // Lazy load pages for better performance
@@ -20,8 +19,58 @@ const Jobs = React.lazy(() => import('./pages/Jobs'));
 const Login = React.lazy(() => import('./pages/auth/Login'));
 const Register = React.lazy(() => import('./pages/auth/Register'));
 
+// Wrap routes with AnimatePresence
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={
+          <PageTransition>
+            <Home />
+          </PageTransition>
+        } />
+        <Route path="/profile" element={
+          <PageTransition>
+            <Profile />
+          </PageTransition>
+        } />
+        <Route path="/resume" element={
+          <PageTransition>
+            <Resume />
+          </PageTransition>
+        } />
+        <Route path="/jobs" element={
+          <PageTransition>
+            <Jobs />
+          </PageTransition>
+        } />
+        <Route path="/login" element={
+          <PageTransition>
+            <Login />
+          </PageTransition>
+        } />
+        <Route path="/register" element={
+          <PageTransition>
+            <Register />
+          </PageTransition>
+        } />
+      </Routes>
+    </AnimatePresence>
+  );
+};
+
 function App() {
   const { theme } = useTheme();
+
+  // Force light theme for now to avoid dark mode issues
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', 'light');
+    return () => {
+      document.documentElement.removeAttribute('data-theme');
+    };
+  }, []);
 
   return (
     <ToastProvider>
@@ -41,7 +90,7 @@ function App() {
             <meta name="twitter:description" content="CareerBoost helps students improve their resumes with AI assistance and matches them with relevant job opportunities." />
             <meta name="twitter:image" content="https://careerboost.com/twitter-image.jpg" />
             <link rel="canonical" href="https://careerboost.com" />
-            <meta name="theme-color" content={theme === 'dark' ? '#1a202c' : '#ffffff'} />
+            <meta name="theme-color" content="#ffffff" />
           </Helmet>
 
           <a href="#main-content" className="skip-to-main-content">
@@ -57,52 +106,7 @@ function App() {
           <main id="main-content" tabIndex={-1}>
             <ErrorBoundary>
               <Suspense fallback={<PageSkeleton />}>
-                <AnimatePresence mode="wait">
-                  <Routes>
-                    <Route path="/" element={
-                      <PageTransition>
-                        <FadeInSection>
-                          <Home />
-                        </FadeInSection>
-                      </PageTransition>
-                    } />
-                    <Route path="/profile" element={
-                      <PageTransition>
-                        <FadeInSection>
-                          <Profile />
-                        </FadeInSection>
-                      </PageTransition>
-                    } />
-                    <Route path="/resume" element={
-                      <PageTransition>
-                        <FadeInSection>
-                          <Resume />
-                        </FadeInSection>
-                      </PageTransition>
-                    } />
-                    <Route path="/jobs" element={
-                      <PageTransition>
-                        <FadeInSection>
-                          <Jobs />
-                        </FadeInSection>
-                      </PageTransition>
-                    } />
-                    <Route path="/login" element={
-                      <PageTransition>
-                        <FadeInSection>
-                          <Login />
-                        </FadeInSection>
-                      </PageTransition>
-                    } />
-                    <Route path="/register" element={
-                      <PageTransition>
-                        <FadeInSection>
-                          <Register />
-                        </FadeInSection>
-                      </PageTransition>
-                    } />
-                  </Routes>
-                </AnimatePresence>
+                <AnimatedRoutes />
               </Suspense>
             </ErrorBoundary>
           </main>

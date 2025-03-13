@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useToast } from '../components/Toast/ToastContext';
 import UploadBox from '../components/Resume/UploadBox';
@@ -20,6 +20,24 @@ const Resume: React.FC = () => {
     const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
     const [activeTab, setActiveTab] = useState<'builder' | 'analyzer'>('builder');
     const [showUploadModal, setShowUploadModal] = useState(false);
+
+    useEffect(() => {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.backgroundColor = '';
+        document.body.style.color = '';
+
+        return () => {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            document.body.style.backgroundColor = '';
+            document.body.style.color = '';
+        };
+    }, []);
 
     const handleResumeUpload = (file: File) => {
         if (file.type !== 'application/pdf') {
@@ -79,9 +97,10 @@ const Resume: React.FC = () => {
     return (
         <div className="resume-page">
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                style={{ position: 'relative', zIndex: 1 }}
             >
                 <div className="resume-header">
                     <h1>AI Resume Builder</h1>
@@ -219,7 +238,6 @@ const Resume: React.FC = () => {
                 )}
             </motion.div>
 
-            {/* Upload Modal */}
             {showUploadModal && (
                 <div className="modal-overlay" onClick={() => setShowUploadModal(false)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>

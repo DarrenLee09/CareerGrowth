@@ -50,18 +50,16 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    height: var(--navbar-height);
-    padding: 0 2rem;
-    background-color: var(--bg-primary);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    width: 100%;
     z-index: 1000;
-    transition: all var(--navbar-transition);
-    border-bottom: 1px solid transparent;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background-color: var(--bg-main, #f8fafc);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    height: var(--header-height, 64px);
 }
 
 .navbar.scrolled {

@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch, FiBriefcase, FiTrendingUp, FiUsers, FiAward, FiCheckCircle, FiStar } from 'react-icons/fi';
 import './HomePage.css';
 
 const Home = () => {
+    useEffect(() => {
+        // Reset any previous page styles
+        document.body.style.backgroundColor = '';
+        document.body.style.color = '';
+
+        return () => {
+            // Cleanup
+            document.body.style.backgroundColor = '';
+            document.body.style.color = '';
+        };
+    }, []);
+
     return (
         <div className="home-page">
             <section className="hero">
