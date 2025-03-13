@@ -1,0 +1,8 @@
+node_modules
+firebase_key.json
+venv
+dataconnect
+dataconnect-generated
+firebase-debug.log
+firestore.rules
+firestore.indexes.json
