@@ -1,0 +1,20 @@
+.profile-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 6rem 2rem 3rem;
+    min-height: 100vh;
+}
+
+.profile-container h1 {
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+.profile-container p {
+    color: #444;
+    text-align: center;
+    font-size: 1.2rem;
+}
