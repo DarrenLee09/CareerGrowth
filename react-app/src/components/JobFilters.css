@@ -1,0 +1,108 @@
+/* Filter Styles */
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: var(--transition-smooth);
+}
+
+.filter-group select:hover,
+.filter-group input:hover {
+    border-color: var(--primary-color);
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+
+/* Filter Section */
+.filters-section {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    border: 1px solid var(--border-color);
+    transition: var(--transition-smooth);
+}
+
+.filters-section:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.filters-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.filters-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .filters-section {
+    background: var(--dark-bg-secondary);
+    border-color: var(--dark-border-color);
+}
+
+[data-theme="dark"] .filter-group select,
+[data-theme="dark"] .filter-group input {
+    background: var(--dark-bg-secondary);
+    border-color: var(--dark-border-color);
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .filter-group select:hover,
+[data-theme="dark"] .filter-group input:hover {
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .filter-group select:focus,
+[data-theme="dark"] .filter-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .filters-section {
+        position: relative;
+        top: 0;
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .filters-section {
+        padding: 1.5rem;
+    }
+
+    .filters-section h2 {
+        font-size: 1.3rem;
+    }
+}

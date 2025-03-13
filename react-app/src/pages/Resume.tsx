@@ -145,6 +145,10 @@ const Resume: React.FC = () => {
                     </div>
                 ) : (
                     <div className="resume-analyzer">
+                        <div className="analyzer-header">
+                            <h2>Resume Analysis</h2>
+                            <p>Upload your resume for AI-powered analysis and recommendations</p>
+                        </div>
                         <div className="upload-section">
                             <UploadBox
                                 onFileUpload={handleResumeUpload}
