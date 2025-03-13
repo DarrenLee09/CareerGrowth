@@ -18,6 +18,8 @@ const Resume = React.lazy(() => import('./pages/Resume'));
 const Jobs = React.lazy(() => import('./pages/Jobs'));
 const Login = React.lazy(() => import('./pages/auth/Login'));
 const Register = React.lazy(() => import('./pages/auth/Register'));
+const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = React.lazy(() => import('./pages/TermsOfService'));
 
 // Wrap routes with AnimatePresence
 const AnimatedRoutes = () => {
@@ -54,6 +56,16 @@ const AnimatedRoutes = () => {
         <Route path="/register" element={
           <PageTransition>
             <Register />
+          </PageTransition>
+        } />
+        <Route path="/privacy-policy" element={
+          <PageTransition>
+            <PrivacyPolicy />
+          </PageTransition>
+        } />
+        <Route path="/terms-of-service" element={
+          <PageTransition>
+            <TermsOfService />
           </PageTransition>
         } />
       </Routes>
