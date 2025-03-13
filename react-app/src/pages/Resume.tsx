@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useToast } from '../components/Toast/ToastContext';
-import UploadBox from '../components/Resume/UploadBox';
-import './Pages.css';
+import { motion } from 'framer-motion';
+import UploadBox from '../resume-components/UploadBox';
+import ResumeAnalysis from '../resume-components/ResumeAnalysis';
+import ResumePreview from '../resume-components/ResumePreview';
+import styles from './Resume.module.css';
 
-interface ResumeAnalysis {
+interface Analysis {
     score: number;
     suggestions: {
         category: string;
@@ -14,29 +15,68 @@ interface ResumeAnalysis {
     missingSkills: string[];
 }
 
+interface Section {
+    title: string;
+    content: string;
+    suggestions: string[];
+    score: number;
+}
+
 const Resume: React.FC = () => {
-    const { showToast } = useToast();
+    const [file, setFile] = useState<File | null>(null);
+    const [analysis, setAnalysis] = useState<Analysis | null>(null);
+    const [sections, setSections] = useState<Section[]>([]);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
-    const [activeTab, setActiveTab] = useState<'builder' | 'analyzer'>('builder');
-    const [showUploadModal, setShowUploadModal] = useState(false);
+    const [isProcessingOCR, setIsProcessingOCR] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
 
-    const handleResumeUpload = (file: File) => {
-        if (file.type !== 'application/pdf') {
-            showToast('Please upload a PDF file', 'error');
-            return;
-        }
-
-        showToast('Resume uploaded successfully', 'success');
-        analyzeResume(file);
-        setShowUploadModal(false);
-    };
-
-    const analyzeResume = async (file: File) => {
+    const handleFileUpload = async (uploadedFile: File) => {
+        setFile(uploadedFile);
         setIsAnalyzing(true);
+        setIsProcessingOCR(true);
+
         try {
-            // TODO: Implement actual API call to analyze resume
-            await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+            // TODO: Implement actual OCR and analysis
+            // For now, using mock data
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Mock OCR results
+            const mockSections: Section[] = [
+                {
+                    title: 'Professional Summary',
+                    content: 'Experienced software developer with expertise in React and TypeScript...',
+                    suggestions: [
+                        'Add more quantifiable achievements',
+                        'Include specific industry impact',
+                        'Highlight leadership experience'
+                    ],
+                    score: 85
+                },
+                {
+                    title: 'Work Experience',
+                    content: 'Senior Developer at Tech Corp (2020-2023)\n- Led team of 5 developers...',
+                    suggestions: [
+                        'Add more metrics and numbers',
+                        'Include specific project outcomes',
+                        'Highlight technical challenges solved'
+                    ],
+                    score: 90
+                },
+                {
+                    title: 'Education',
+                    content: 'BS in Computer Science\nUniversity of Technology (2015-2019)',
+                    suggestions: [
+                        'Add relevant coursework',
+                        'Include GPA if above 3.5',
+                        'List academic achievements'
+                    ],
+                    score: 75
+                }
+            ];
+
+            setSections(mockSections);
+
+            // Mock overall analysis
             setAnalysis({
                 score: 85,
                 suggestions: [
@@ -45,217 +85,91 @@ const Resume: React.FC = () => {
                         items: [
                             'Add more quantifiable achievements',
                             'Include relevant certifications',
-                            'Strengthen action verbs in experience section'
+                            'Expand on leadership experience'
                         ]
                     },
                     {
                         category: 'Format',
                         items: [
                             'Improve section spacing',
-                            'Consider using bullet points for better readability',
-                            'Ensure consistent font usage'
-                        ]
-                    },
-                    {
-                        category: 'Keywords',
-                        items: [
-                            'Add more industry-specific keywords',
-                            'Include technical skills section',
-                            'Highlight relevant tools and technologies'
+                            'Use consistent formatting',
+                            'Add clear section headers'
                         ]
                     }
                 ],
-                keywords: ['JavaScript', 'React', 'Node.js', 'Project Management'],
-                missingSkills: ['TypeScript', 'AWS', 'CI/CD']
+                keywords: ['React', 'TypeScript', 'Node.js', 'AWS'],
+                missingSkills: ['Docker', 'GraphQL', 'CI/CD']
             });
-            showToast('Resume analysis complete!', 'success');
+
+            setShowPreview(true);
         } catch (error) {
-            showToast('Failed to analyze resume. Please try again.', 'error');
+            console.error('Error processing resume:', error);
         } finally {
             setIsAnalyzing(false);
+            setIsProcessingOCR(false);
         }
     };
 
+    const handleSectionUpdate = (sectionIndex: number, updatedContent: string) => {
+        setSections(prev => prev.map((section, index) =>
+            index === sectionIndex
+                ? { ...section, content: updatedContent }
+                : section
+        ));
+    };
+
     return (
-        <div className="page-container">
-            <div className="resume-page">
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="resume-content"
-                >
-                    <div className="resume-header">
-                        <h1>AI Resume Builder</h1>
-                        <p>Create an ATS-friendly resume with real-time AI feedback</p>
-                    </div>
+        <div className={styles.pageContainer}>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className={styles.resumePage}
+            >
+                <h1>Resume Builder</h1>
+                <p className={styles.subtitle}>Upload your resume for AI-powered analysis and improvements</p>
 
-                    <div className="resume-tabs">
-                        <button
-                            className={`tab-button ${activeTab === 'builder' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('builder')}
-                        >
-                            Resume Builder
-                        </button>
-                        <button
-                            className={`tab-button ${activeTab === 'analyzer' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('analyzer')}
-                        >
-                            Resume Analyzer
-                        </button>
-                    </div>
-
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeTab}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            {activeTab === 'builder' ? (
-                                <div className="resume-builder">
-                                    <div className="builder-sidebar">
-                                        <h2>Sections</h2>
-                                        <ul className="section-list">
-                                            <li className="active">Personal Info</li>
-                                            <li>Summary</li>
-                                            <li>Experience</li>
-                                            <li>Education</li>
-                                            <li>Skills</li>
-                                            <li>Projects</li>
-                                            <li>Certifications</li>
-                                        </ul>
-                                        <div className="ai-assistant">
-                                            <h3>AI Assistant</h3>
-                                            <div className="ai-suggestions">
-                                                <p>💡 Try adding specific metrics to your achievements</p>
-                                                <p>💡 Use action verbs to start bullet points</p>
-                                                <p>💡 Include relevant keywords from job descriptions</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="builder-main">
-                                        <div className="resume-preview">
-                                            <div className="resume-template">
-                                                <p className="placeholder-text">Resume preview will be implemented with backend integration</p>
-                                            </div>
-                                        </div>
-                                        <div className="builder-actions">
-                                            <button className="action-button primary">Save Draft</button>
-                                            <button
-                                                className="action-button secondary"
-                                                onClick={() => setShowUploadModal(true)}
-                                            >
-                                                Export PDF
-                                            </button>
-                                            <button className="action-button">Preview</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="resume-analyzer">
-                                    <div className="analyzer-header">
-                                        <h2>Resume Analysis</h2>
-                                        <p>Upload your resume for AI-powered analysis and recommendations</p>
-                                    </div>
-                                    <div className="upload-section">
-                                        <UploadBox
-                                            onFileUpload={handleResumeUpload}
-                                            acceptedFileTypes={['.pdf', 'application/pdf']}
-                                            maxSize={5 * 1024 * 1024} // 5MB
-                                        />
-                                        {isAnalyzing ? (
-                                            <div className="analyzing-indicator">
-                                                <div className="spinner"></div>
-                                                <p>Analyzing your resume...</p>
-                                            </div>
-                                        ) : analysis && (
-                                            <div className="analysis-results">
-                                                <div className="score-card">
-                                                    <div className="score-circle">
-                                                        <svg viewBox="0 0 36 36">
-                                                            <path
-                                                                d="M18 2.0845
-                                                                a 15.9155 15.9155 0 0 1 0 31.831
-                                                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                                                                fill="none"
-                                                                stroke="var(--primary-color)"
-                                                                strokeWidth="3"
-                                                                strokeDasharray={`${analysis.score}, 100`}
-                                                            />
-                                                        </svg>
-                                                        <span className="score">{analysis.score}</span>
-                                                    </div>
-                                                    <h3>Resume Score</h3>
-                                                </div>
-
-                                                <div className="analysis-sections">
-                                                    {analysis.suggestions.map((section, index) => (
-                                                        <div key={index} className="analysis-section">
-                                                            <h3>{section.category}</h3>
-                                                            <ul>
-                                                                {section.items.map((item, i) => (
-                                                                    <li key={i}>{item}</li>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
-                                                    ))}
-                                                </div>
-
-                                                <div className="keyword-analysis">
-                                                    <h3>Detected Keywords</h3>
-                                                    <div className="keyword-tags">
-                                                        {analysis.keywords.map((keyword, index) => (
-                                                            <span key={index} className="keyword-tag">
-                                                                {keyword}
-                                                            </span>
-                                                        ))}
-                                                    </div>
-
-                                                    <h3>Suggested Skills to Add</h3>
-                                                    <div className="keyword-tags missing">
-                                                        {analysis.missingSkills.map((skill, index) => (
-                                                            <span key={index} className="keyword-tag">
-                                                                + {skill}
-                                                            </span>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-                        </motion.div>
-                    </AnimatePresence>
-                </motion.div>
-
-                {showUploadModal && (
-                    <div className="modal-overlay" onClick={() => setShowUploadModal(false)}>
-                        <div className="modal-content" onClick={e => e.stopPropagation()}>
-                            <div className="modal-header">
-                                <h2>Export Resume as PDF</h2>
-                                <button
-                                    className="modal-close"
-                                    onClick={() => setShowUploadModal(false)}
-                                >
-                                    ×
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <UploadBox
-                                    onFileUpload={handleResumeUpload}
-                                    acceptedFileTypes={['.pdf', 'application/pdf']}
-                                    maxSize={5 * 1024 * 1024} // 5MB
-                                />
-                            </div>
+                <div className={styles.content}>
+                    {!showPreview ? (
+                        <div className={styles.uploadSection}>
+                            <UploadBox
+                                onFileUpload={handleFileUpload}
+                                acceptedFileTypes={['.pdf', '.doc', '.docx']}
+                                maxSize={5 * 1024 * 1024} // 5MB
+                            />
                         </div>
-                    </div>
-                )}
-            </div>
+                    ) : (
+                        <ResumePreview
+                            sections={sections.map(({ title, content }) => ({ title, content }))}
+                            onSectionUpdate={handleSectionUpdate}
+                        />
+                    )}
+
+                    {(isAnalyzing || isProcessingOCR) && (
+                        <div className={styles.loading}>
+                            <div className={styles.spinner}></div>
+                            <p>
+                                {isProcessingOCR
+                                    ? 'Processing your resume with OCR...'
+                                    : 'Analyzing your resume...'}
+                            </p>
+                        </div>
+                    )}
+
+                    {analysis && !showPreview && (
+                        <div className={styles.analysisSection}>
+                            <ResumeAnalysis
+                                score={analysis.score}
+                                suggestions={analysis.suggestions}
+                                keywords={analysis.keywords}
+                                missingSkills={analysis.missingSkills}
+                            />
+                        </div>
+                    )}
+                </div>
+            </motion.div>
         </div>
     );
 };
 
-export default Resume; 
+export default Resume;

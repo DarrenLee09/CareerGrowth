@@ -1,0 +1,90 @@
+.uploadBoxContainer {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.uploadBox {
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--card-background);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.uploadBox:hover {
+    border-color: var(--primary-color);
+    background-color: var(--hover-color);
+}
+
+.uploadBox.active {
+    border-color: var(--primary-color);
+    background-color: var(--hover-color);
+}
+
+.uploadBox.reject {
+    border-color: #e53e3e;
+}
+
+.uploadContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.uploadIcon {
+    font-size: 2.5rem;
+}
+
+.uploadText {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.primaryText {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.secondaryText {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.browseText {
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.fileInfo {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.uploadError {
+    color: #e53e3e;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .uploadBox {
+        background-color: var(--dark-card-background);
+    }
+
+    .uploadBox:hover,
+    .uploadBox.active {
+        background-color: var(--dark-hover-color);
+    }
+}

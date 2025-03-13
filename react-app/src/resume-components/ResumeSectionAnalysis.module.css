@@ -1,0 +1,162 @@
+.sectionAnalysis {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--card-shadow);
+    margin-top: 2rem;
+}
+
+.sectionAnalysis h2 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.sectionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.sectionCard {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sectionHeader h3 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.sectionScore {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.sectionContent {
+    margin-bottom: 1.5rem;
+}
+
+.sectionContent p {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.editMode {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.editTextarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    resize: vertical;
+}
+
+.editActions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.editButton,
+.saveButton,
+.cancelButton {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.editButton {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.saveButton {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+}
+
+.cancelButton {
+    background-color: var(--error-color);
+    color: white;
+    border: none;
+}
+
+.suggestions {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.suggestions h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.suggestions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.suggestions li {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.suggestions li::before {
+    content: "💡";
+    position: absolute;
+    left: 0;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .sectionAnalysis {
+        background-color: var(--dark-card-background);
+    }
+
+    .sectionCard {
+        background-color: var(--dark-background);
+    }
+
+    .editTextarea {
+        background-color: var(--dark-background);
+        color: var(--dark-text-color);
+        border-color: var(--dark-border-color);
+    }
+
+    .suggestions {
+        background-color: var(--dark-background);
+    }
+
+    .suggestions li {
+        color: var(--dark-text-secondary);
+    }
+}

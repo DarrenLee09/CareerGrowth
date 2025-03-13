@@ -1,0 +1,113 @@
+.chatContainer {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    margin-top: 2rem;
+}
+
+.chatHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.chatIcon {
+    font-size: 1.5rem;
+}
+
+.chatHeader h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.chatMessages {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.message {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: var(--background-color);
+}
+
+.message.user {
+    background-color: var(--primary-color);
+    color: white;
+    margin-left: 2rem;
+}
+
+.message.assistant {
+    background-color: var(--background-color);
+    margin-right: 2rem;
+}
+
+.messageContent {
+    flex: 1;
+}
+
+.messageContent p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.chatInput {
+    display: flex;
+    gap: 1rem;
+}
+
+.chatInput input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.chatInput button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.chatInput button:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .chatContainer {
+        background-color: var(--dark-card-background);
+    }
+
+    .message {
+        background-color: var(--dark-background);
+    }
+
+    .message.user {
+        background-color: var(--primary-color);
+    }
+
+    .message.assistant {
+        background-color: var(--dark-background);
+    }
+
+    .chatInput input {
+        background-color: var(--dark-background);
+        color: var(--dark-text-color);
+        border-color: var(--dark-border-color);
+    }
+}
