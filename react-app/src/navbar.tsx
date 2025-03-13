@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTheme } from './contexts/ThemeContext';
 import './navbar.css';
 
 const Navbar: React.FC = () => {
     const location = useLocation();
-    const { theme, toggleTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -216,24 +214,6 @@ const Navbar: React.FC = () => {
                 </ul>
 
                 <div className="nav-buttons">
-                    <button
-                        className="theme-toggle"
-                        onClick={toggleTheme}
-                        aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-                        title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-                        tabIndex={isMenuOpen ? 0 : -1}
-                    >
-                        {theme === 'light' ? (
-                            <svg className="theme-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path d="M12 3a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm7.071 7.071a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0zm-14.142 0a1 1 0 0 1 1.414 0l.707.707A1 1 0 1 1 5.636 12.2l-.707-.707a1 1 0 0 1 0-1.414zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-9 2a1 1 0 1 1 0 2H2a1 1 0 1 1 0-2h1zm17 0a1 1 0 1 1 0 2h-1a1 1 0 1 1 0-2h1zM5.636 15.8a1 1 0 0 1 1.414 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707zm11.314 0a1 1 0 0 1 1.414 1.414l-.707.707a1 1 0 0 1-1.414-1.414l.707-.707zM12 19a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1z" />
-                            </svg>
-                        ) : (
-                            <svg className="theme-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 3z" />
-                            </svg>
-                        )}
-                    </button>
-
                     {isLoggedIn ? (
                         <div ref={userMenuRef} className="user-menu-container">
                             <button
