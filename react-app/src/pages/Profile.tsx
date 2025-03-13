@@ -88,7 +88,7 @@ const Profile: React.FC = () => {
         }));
     };
 
-    const handleExperienceChange = (index: number, field: string, value: string) => {
+    const handleExperienceChange = (index: number, field: keyof ProfileData['experience'][0], value: string) => {
         setProfileData(prev => {
             const updatedExperience = [...prev.experience];
             const currentExp = { ...updatedExperience[index] };
