@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '../components/Toast/ToastContext';
 import UploadBox from '../components/Resume/UploadBox';
 import './Pages.css';
@@ -20,24 +20,6 @@ const Resume: React.FC = () => {
     const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
     const [activeTab, setActiveTab] = useState<'builder' | 'analyzer'>('builder');
     const [showUploadModal, setShowUploadModal] = useState(false);
-
-    useEffect(() => {
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.backgroundColor = '';
-        document.body.style.color = '';
-
-        return () => {
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.width = '';
-            document.body.style.backgroundColor = '';
-            document.body.style.color = '';
-        };
-    }, []);
 
     const handleResumeUpload = (file: File) => {
         if (file.type !== 'application/pdf') {
@@ -95,171 +77,183 @@ const Resume: React.FC = () => {
     };
 
     return (
-        <div className="resume-page">
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                style={{ position: 'relative', zIndex: 1 }}
-            >
-                <div className="resume-header">
-                    <h1>AI Resume Builder</h1>
-                    <p>Create an ATS-friendly resume with real-time AI feedback</p>
-                </div>
-
-                <div className="resume-tabs">
-                    <button
-                        className={`tab-button ${activeTab === 'builder' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('builder')}
-                    >
-                        Resume Builder
-                    </button>
-                    <button
-                        className={`tab-button ${activeTab === 'analyzer' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('analyzer')}
-                    >
-                        Resume Analyzer
-                    </button>
-                </div>
-
-                {activeTab === 'builder' ? (
-                    <div className="resume-builder">
-                        <div className="builder-sidebar">
-                            <h2>Sections</h2>
-                            <ul className="section-list">
-                                <li className="active">Personal Info</li>
-                                <li>Summary</li>
-                                <li>Experience</li>
-                                <li>Education</li>
-                                <li>Skills</li>
-                                <li>Projects</li>
-                                <li>Certifications</li>
-                            </ul>
-                            <div className="ai-assistant">
-                                <h3>AI Assistant</h3>
-                                <div className="ai-suggestions">
-                                    <p>💡 Try adding specific metrics to your achievements</p>
-                                    <p>💡 Use action verbs to start bullet points</p>
-                                    <p>💡 Include relevant keywords from job descriptions</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="builder-main">
-                            <div className="resume-preview">
-                                <div className="resume-template">
-                                    <p className="placeholder-text">Resume preview will be implemented with backend integration</p>
-                                </div>
-                            </div>
-                            <div className="builder-actions">
-                                <button className="action-button primary">Save Draft</button>
-                                <button
-                                    className="action-button secondary"
-                                    onClick={() => setShowUploadModal(true)}
-                                >
-                                    Export PDF
-                                </button>
-                                <button className="action-button">Preview</button>
-                            </div>
-                        </div>
+        <div className="page-container">
+            <div className="resume-page">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="resume-content"
+                >
+                    <div className="resume-header">
+                        <h1>AI Resume Builder</h1>
+                        <p>Create an ATS-friendly resume with real-time AI feedback</p>
                     </div>
-                ) : (
-                    <div className="resume-analyzer">
-                        <div className="analyzer-header">
-                            <h2>Resume Analysis</h2>
-                            <p>Upload your resume for AI-powered analysis and recommendations</p>
-                        </div>
-                        <div className="upload-section">
-                            <UploadBox
-                                onFileUpload={handleResumeUpload}
-                                acceptedFileTypes={['.pdf', 'application/pdf']}
-                                maxSize={5 * 1024 * 1024} // 5MB
-                            />
-                            {isAnalyzing ? (
-                                <div className="analyzing-indicator">
-                                    <div className="spinner"></div>
-                                    <p>Analyzing your resume...</p>
-                                </div>
-                            ) : analysis && (
-                                <div className="analysis-results">
-                                    <div className="score-card">
-                                        <div className="score-circle">
-                                            <svg viewBox="0 0 36 36">
-                                                <path
-                                                    d="M18 2.0845
-                                                    a 15.9155 15.9155 0 0 1 0 31.831
-                                                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                                                    fill="none"
-                                                    stroke="var(--primary-color)"
-                                                    strokeWidth="3"
-                                                    strokeDasharray={`${analysis.score}, 100`}
-                                                />
-                                            </svg>
-                                            <span className="score">{analysis.score}</span>
-                                        </div>
-                                        <h3>Resume Score</h3>
-                                    </div>
 
-                                    <div className="analysis-sections">
-                                        {analysis.suggestions.map((section, index) => (
-                                            <div key={index} className="analysis-section">
-                                                <h3>{section.category}</h3>
-                                                <ul>
-                                                    {section.items.map((item, i) => (
-                                                        <li key={i}>{item}</li>
-                                                    ))}
-                                                </ul>
+                    <div className="resume-tabs">
+                        <button
+                            className={`tab-button ${activeTab === 'builder' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('builder')}
+                        >
+                            Resume Builder
+                        </button>
+                        <button
+                            className={`tab-button ${activeTab === 'analyzer' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('analyzer')}
+                        >
+                            Resume Analyzer
+                        </button>
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeTab}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            {activeTab === 'builder' ? (
+                                <div className="resume-builder">
+                                    <div className="builder-sidebar">
+                                        <h2>Sections</h2>
+                                        <ul className="section-list">
+                                            <li className="active">Personal Info</li>
+                                            <li>Summary</li>
+                                            <li>Experience</li>
+                                            <li>Education</li>
+                                            <li>Skills</li>
+                                            <li>Projects</li>
+                                            <li>Certifications</li>
+                                        </ul>
+                                        <div className="ai-assistant">
+                                            <h3>AI Assistant</h3>
+                                            <div className="ai-suggestions">
+                                                <p>💡 Try adding specific metrics to your achievements</p>
+                                                <p>💡 Use action verbs to start bullet points</p>
+                                                <p>💡 Include relevant keywords from job descriptions</p>
                                             </div>
-                                        ))}
+                                        </div>
                                     </div>
-
-                                    <div className="keyword-analysis">
-                                        <h3>Detected Keywords</h3>
-                                        <div className="keyword-tags">
-                                            {analysis.keywords.map((keyword, index) => (
-                                                <span key={index} className="keyword-tag">
-                                                    {keyword}
-                                                </span>
-                                            ))}
+                                    <div className="builder-main">
+                                        <div className="resume-preview">
+                                            <div className="resume-template">
+                                                <p className="placeholder-text">Resume preview will be implemented with backend integration</p>
+                                            </div>
                                         </div>
-
-                                        <h3>Suggested Skills to Add</h3>
-                                        <div className="keyword-tags missing">
-                                            {analysis.missingSkills.map((skill, index) => (
-                                                <span key={index} className="keyword-tag">
-                                                    + {skill}
-                                                </span>
-                                            ))}
+                                        <div className="builder-actions">
+                                            <button className="action-button primary">Save Draft</button>
+                                            <button
+                                                className="action-button secondary"
+                                                onClick={() => setShowUploadModal(true)}
+                                            >
+                                                Export PDF
+                                            </button>
+                                            <button className="action-button">Preview</button>
                                         </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="resume-analyzer">
+                                    <div className="analyzer-header">
+                                        <h2>Resume Analysis</h2>
+                                        <p>Upload your resume for AI-powered analysis and recommendations</p>
+                                    </div>
+                                    <div className="upload-section">
+                                        <UploadBox
+                                            onFileUpload={handleResumeUpload}
+                                            acceptedFileTypes={['.pdf', 'application/pdf']}
+                                            maxSize={5 * 1024 * 1024} // 5MB
+                                        />
+                                        {isAnalyzing ? (
+                                            <div className="analyzing-indicator">
+                                                <div className="spinner"></div>
+                                                <p>Analyzing your resume...</p>
+                                            </div>
+                                        ) : analysis && (
+                                            <div className="analysis-results">
+                                                <div className="score-card">
+                                                    <div className="score-circle">
+                                                        <svg viewBox="0 0 36 36">
+                                                            <path
+                                                                d="M18 2.0845
+                                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                                fill="none"
+                                                                stroke="var(--primary-color)"
+                                                                strokeWidth="3"
+                                                                strokeDasharray={`${analysis.score}, 100`}
+                                                            />
+                                                        </svg>
+                                                        <span className="score">{analysis.score}</span>
+                                                    </div>
+                                                    <h3>Resume Score</h3>
+                                                </div>
+
+                                                <div className="analysis-sections">
+                                                    {analysis.suggestions.map((section, index) => (
+                                                        <div key={index} className="analysis-section">
+                                                            <h3>{section.category}</h3>
+                                                            <ul>
+                                                                {section.items.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                <div className="keyword-analysis">
+                                                    <h3>Detected Keywords</h3>
+                                                    <div className="keyword-tags">
+                                                        {analysis.keywords.map((keyword, index) => (
+                                                            <span key={index} className="keyword-tag">
+                                                                {keyword}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+
+                                                    <h3>Suggested Skills to Add</h3>
+                                                    <div className="keyword-tags missing">
+                                                        {analysis.missingSkills.map((skill, index) => (
+                                                            <span key={index} className="keyword-tag">
+                                                                + {skill}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
+                        </motion.div>
+                    </AnimatePresence>
+                </motion.div>
+
+                {showUploadModal && (
+                    <div className="modal-overlay" onClick={() => setShowUploadModal(false)}>
+                        <div className="modal-content" onClick={e => e.stopPropagation()}>
+                            <div className="modal-header">
+                                <h2>Export Resume as PDF</h2>
+                                <button
+                                    className="modal-close"
+                                    onClick={() => setShowUploadModal(false)}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <UploadBox
+                                    onFileUpload={handleResumeUpload}
+                                    acceptedFileTypes={['.pdf', 'application/pdf']}
+                                    maxSize={5 * 1024 * 1024} // 5MB
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
-            </motion.div>
-
-            {showUploadModal && (
-                <div className="modal-overlay" onClick={() => setShowUploadModal(false)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h2>Export Resume as PDF</h2>
-                            <button
-                                className="modal-close"
-                                onClick={() => setShowUploadModal(false)}
-                            >
-                                ×
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <UploadBox
-                                onFileUpload={handleResumeUpload}
-                                acceptedFileTypes={['.pdf', 'application/pdf']}
-                                maxSize={5 * 1024 * 1024} // 5MB
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
+            </div>
         </div>
     );
 };
