@@ -33,8 +33,18 @@ const Login: React.FC = () => {
         setIsLoading(true);
         try {
             // TODO: Implement login API call
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-            showToast('Login successful!', 'success');
+            const response = await fetch("http://localhost:5000/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to login");
+            }
+
+            //await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+            showToast("Login successful!", "success");
             navigate('/profile');
         } catch (error) {
             showToast('Invalid email or password', 'error');

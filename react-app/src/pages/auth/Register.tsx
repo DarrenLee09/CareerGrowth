@@ -68,9 +68,22 @@ const Register: React.FC = () => {
         } else if (step === 3) {
             try {
                 // TODO: Implement registration API call
-                showToast('Registration successful!', 'success');
+                const response = await fetch("http://localhost:5000/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                });
+                // const test = await response.json();
+                // console.log("API Response:", test);
+    
+                if (!response.ok) {
+                    throw new Error("Failed to register");
+                }
+
+                showToast("Registration successful!", "success");
                 navigate('/login');
             } catch (error) {
+                //console.error(error);
                 showToast('Registration failed. Please try again.', 'error');
             }
         }
