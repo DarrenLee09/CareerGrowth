@@ -1,0 +1,81 @@
+.pageContainer {
+    width: 100%;
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.resumePage {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.uploadSection {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.analysisSection {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.chatSection {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .pageContainer {
+        background-color: var(--background-color-dark);
+    }
+
+    .subtitle {
+        color: var(--text-secondary-dark);
+    }
+}
