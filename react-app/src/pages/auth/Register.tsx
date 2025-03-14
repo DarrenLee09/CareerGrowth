@@ -68,9 +68,30 @@ const Register: React.FC = () => {
         } else if (step === 3) {
             try {
                 // TODO: Implement registration API call
-                showToast('Registration successful!', 'success');
+                const response = await fetch("http://localhost:5000/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                });
+
+                const response_data = await response.json();
+
+                // For debugging purposes
+                // console.log("API Response:", response_data);
+    
+                if (response_data.error) {
+                    if (response_data.error.includes("EMAIL_EXISTS")) {
+                        showToast("This email is already registered. Please use a different email.", "error");
+                    } else {
+                        showToast("Registration failed. Please try again.", "error");
+                    }
+                    return;
+                }
+
+                showToast("Registration successful!", "success");
                 navigate('/login');
             } catch (error) {
+                //console.error(error);
                 showToast('Registration failed. Please try again.', 'error');
             }
         }
