@@ -39,15 +39,24 @@ const Login: React.FC = () => {
                 body: JSON.stringify(formData),
             });
 
+            const response_data = await response.json();
+
             if (!response.ok) {
-                throw new Error("Failed to login");
+                throw new Error("Invalid email or password");
+            }
+            if (response_data.error) {
+                throw new Error(response_data.error);
             }
 
             //await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
             showToast("Login successful!", "success");
             navigate('/profile');
         } catch (error) {
-            showToast('Invalid email or password', 'error');
+            if (error instanceof Error) {
+                showToast(error.message, 'error');
+            } else {
+                showToast('An unknown error occurred', 'error');
+            }
         } finally {
             setIsLoading(false);
         }
