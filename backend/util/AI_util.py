@@ -1,4 +1,33 @@
-from openai import OpenAI
+from google import genai
+from google.genai import types
+from tenacity import retry, wait_random_exponential, stop_after_attempt
+
+
+import os
+import uuid
+
+class Chatbot:
+    def __init__(self):
+        self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        self.chat = None # conversation object
+    
+    @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
+    def process_chat(self, prompt):
+        if not self.chat:
+            self.chat = self.client.chats.create(
+            model="gemini-2.0-flash",
+            history=[]
+        )
+        self.chat._comprehensive_history.append(prompt)
+        response = self.chat.send_message(
+            config=types.GenerateContentConfig(
+            system_instruction="You are an assistant whose job is to help users improve their resumes."),
+            message=[prompt]
+        )
+        self.chat._comprehensive_history.append(response)
+        return response
+
+'''from openai import OpenAI
 import redis
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 
@@ -175,4 +204,5 @@ def run_test():
 
 if __name__ == "__main__":
     success = run_test()
-    sys.exit(0 if success else 1)
+    sys.exit(0 if success else 1)'''
+
