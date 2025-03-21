@@ -2,78 +2,73 @@ from google import genai
 from google.genai import types
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 
-
 import os
 import uuid
 
 class Chatbot:
     def __init__(self):
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-        self.chat = None # conversation object
+        self.user_sessions = {} # conversation object, maps user to their respective chat
+    
+    def get_chat_session(self, user_id):
+        if user_id not in self.user_sessions:
+            # create a new chat session for this user
+            self.user_sessions[user_id] = self.client.chats.create(
+                model="gemini-2.0-flash",
+                history=[]
+            )
+        
+        return self.user_sessions[user_id]
     
     @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
-    def process_chat(self, prompt):
-        if not self.chat:
-            self.chat = self.client.chats.create(
-            model="gemini-2.0-flash",
-            history=[]
-        )
-        self.chat._comprehensive_history.append(prompt)
-        response = self.chat.send_message(
+    def process_chat(self, prompt, user_id):
+        chat = self.get_chat_session(user_id)
+        chat._comprehensive_history.append(prompt)
+        response = chat.send_message(
             config=types.GenerateContentConfig(
             system_instruction="You are an assistant whose job is to help users improve their resumes."),
             message=[prompt]
         )
-        self.chat._comprehensive_history.append(response)
+        chat._comprehensive_history.append(response)
         return response
-
-'''from openai import OpenAI
-import redis
-from tenacity import retry, wait_random_exponential, stop_after_attempt
-
-import time
-import os
-import json
-import uuid
-import sys
-
-# TO DO: implement retrieval and context creation
-class Chatbot:
-    def __init__(self):
-        self.session_manager = SessionManager()
-        self.client = OpenAI(api_key=os.getenv("GEMINI_API_KEY"), 
-                base_url="https://generativelanguage.googleapis.com/v1beta/openai/")
-
-    @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
-    def process_message(self, prompt, session_id):
-        hist = self.session_manager.get_session(session_id)
-        if not hist:
-            self.session_manager.create_session(session_id)
-        
-        self.session_manager.add_message(session_id, "user", prompt)
-
-        try:
-            response = self.client.chat.completions.create(
-                model="gemini-2.0-flash",
-                messages=[
-                    {"role": "system", 
-                    "content": "You are an assistant whose job is to help users improve their resumes."
-                    },
-                    {"role": "user",
-                    "content": prompt
-                    },
-                ],
-            )
-            self.session_manager.add_message(session_id, "assistant", str(response))
-            return response
-        
-        except Exception as e:
-            print("Unable to generate response")
-            print(f"Exception: {e}")
-            return e
     
-    async def retrive(self):
-        pass
+# TEST STUFF
+    
+def test_chatbot():
+    print("Starting Chatbot test...")
+    
+    chatbot = Chatbot()
+
+    test_user_id = str(uuid.uuid4())
+    print(f"Test user ID: {test_user_id}")
+    
+    test_prompt = "Can you help me improve this resume summary: 'Experienced software engineer with 5 years of experience in Python development'?"
+    print(f"Test prompt: {test_prompt}")
+    
+    try:
+        response = chatbot.process_chat(test_prompt, test_user_id)
+
+        print("\nResponse from Gemini:")
+        print(response.text)
+
+        chat = chatbot.get_chat_session(test_user_id)
+        print("\nChat history:")
+        for message in chat._curated_history:
+            role = "User" if message.role == "user" else "Assistant"
+            print(f"{role}: {message.parts[0].text}")
+        
+        print("\nTest completed successfully!")
+        
+    except Exception as e:
+        print(f"\nError during test: {e}")
+        import traceback
+        traceback.print_exc()
+
+if __name__ == "__main__":
+    test_chatbot()
+
+'''
+import redis
 
 class SessionManager:
     def __init__(self, redis_url="redis://localhost:6379/0", session_expiry=7200):
@@ -135,74 +130,5 @@ class SessionManager:
         self.redis.delete(f"session:{session_id}:data")
         self.redis.delete(f"session:{session_id}:meta")
 
-# TESTING FUNCTIONS
-
-def run_test():
-    """Run a simple test of the Redis session manager and chatbot"""
-    print("Starting Redis Chatbot Test...")
-    
-    # Test configuration
-    redis_url = "redis://localhost:6379/0"
-    test_session_id = f"test-session-{int(time.time())}"
-    
-    # Connect to Redis
-    try:
-        redis_client = redis.from_url(redis_url)
-        redis_client.ping()
-        print("✅ Connected to Redis successfully")
-    except redis.exceptions.ConnectionError:
-        print("❌ Failed to connect to Redis. Make sure Redis is running.")
-        return False
-    
-    # Initialize session manager
-    session_manager = SessionManager(redis_url=redis_url)
-    print(f"✅ Initialized session manager with test session: {test_session_id}")
-    
-    # Test creating a session
-    session_manager.create_session(test_session_id)
-    print("✅ Created test session")
-    
-    # Test adding messages
-    session_manager.add_message(test_session_id, "user", "Hello!")
-    print("✅ Added user message")
-    
-    # Test retrieving session
-    history = session_manager.get_session(test_session_id)
-    if history and len(history) == 1:
-        print(f"✅ Retrieved session history: {json.dumps(history)}")
-    else:
-        print(f"❌ Failed to retrieve correct session history: {history}")
-        return False
-    
-    # Initialize chatbot
-    chatbot = Chatbot()
-    print("✅ Initialized chatbot")
-    
-    # Test processing a message
-    response = chatbot.process_message(test_session_id, "Test message")
-    print(f"✅ Processed message and got response: '{response}'")
-    
-    # Verify conversation history
-    history = session_manager.get_session(test_session_id)
-    if len(history) == 3:  # Original "Hello" + user message + bot response
-        print(f"✅ Conversation history updated correctly with {len(history)} messages")
-        print(f"  History: {json.dumps(history, indent=2)}")
-    else:
-        print(f"❌ Conversation history incorrect: {history}")
-        return False
-    
-    # Test deleting a session
-    session_manager.delete_session(test_session_id)
-    if not session_manager.get_session(test_session_id):
-        print("✅ Successfully deleted test session")
-    else:
-        print("❌ Failed to delete test session")
-        return False
-    
-    print("\n✅ All tests passed successfully!")
-    return True
-
-if __name__ == "__main__":
-    success = run_test()
-    sys.exit(0 if success else 1)'''
+'''
 

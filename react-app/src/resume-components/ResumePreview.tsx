@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ResumePreview.module.css';
+import { stringify } from 'querystring';
+import { useToast } from '../components/Toast/ToastContext';
 
 interface ResumePreviewProps {
     sections: {
@@ -16,6 +18,8 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({
     const [activeSection, setActiveSection] = useState<number | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState('');
+    const { showToast } = useToast();
+    // TODO: chatNessages needs to retrive actual chat data
     const [chatMessages, setChatMessages] = useState<Array<{ type: 'user' | 'assistant'; content: string }>>([
         {
             type: 'assistant',
@@ -42,7 +46,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({
         setActiveSection(null);
     };
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (!inputMessage.trim()) return;
 
         const userMessage = {
@@ -53,14 +57,31 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({
         setChatMessages(prev => [...prev, userMessage]);
         setInputMessage('');
 
+        try {
+            const response = await fetch(
+                "http://localhost:5000/chat", {
+                    method:"POST",
+                    headers:{ "Content-Type": "application/json" },
+                    body: JSON.stringify(userMessage)
+                });
+
+            if (!response.ok) {
+                throw new Error("Error sending message");
+            }
+            // TODO: update conversation history with each message sent and display it
+        } catch (error) {
+            showToast('Could not send message', 'error');
+        }
+        
         // TODO: Implement actual AI response
-        setTimeout(() => {
+        /*setTimeout(() => {
             const aiResponse = {
                 type: 'assistant' as const,
                 content: 'I can help you improve that section. Would you like me to suggest some improvements?'
             };
             setChatMessages(prev => [...prev, aiResponse]);
-        }, 1000);
+        }, 1000);*/
+
     };
 
     return (
