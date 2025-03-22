@@ -40,13 +40,13 @@ def login():
 @app.route('/chat', methods=['POST'])
 def send_message():
     data = request.get_json()
-    contents = data.get('message')
+    message = data.get('message')
 
-    if not contents:
+    if not message:
         return jsonify("Please enter a message")
     
     chat = Chatbot()
-    response = chat.process_chat(contents)
+    response = chat.process_chat(message)
     return jsonify(response)
 
 if __name__ == "__main__":

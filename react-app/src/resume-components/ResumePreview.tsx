@@ -68,11 +68,17 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({
             if (!response.ok) {
                 throw new Error("Error sending message");
             }
+            const aiResponseData = await response.json();
+            const aiMessage = {
+                type: 'assistant' as const,
+                content: JSON.parse(aiResponseData['response'])
+            }
+            setChatMessages(prev => [...prev, aiMessage]);
             // TODO: update conversation history with each message sent and display it
         } catch (error) {
             showToast('Could not send message', 'error');
         }
-        
+
         // TODO: Implement actual AI response
         /*setTimeout(() => {
             const aiResponse = {

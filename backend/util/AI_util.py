@@ -5,6 +5,7 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt
 import os
 import uuid
 
+# TODO: integrate auth library into the chatbot
 class Chatbot:
     def __init__(self):
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -12,7 +13,6 @@ class Chatbot:
     
     def get_chat_session(self, user_id):
         if user_id not in self.user_sessions:
-            # create a new chat session for this user
             self.user_sessions[user_id] = self.client.chats.create(
                 model="gemini-2.0-flash",
                 history=[]
@@ -23,13 +23,13 @@ class Chatbot:
     @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
     def process_chat(self, prompt, user_id):
         chat = self.get_chat_session(user_id)
-        chat._comprehensive_history.append(prompt)
+        chat._comprehensive_history.append(prompt) # add user's message to the log
         response = chat.send_message(
             config=types.GenerateContentConfig(
             system_instruction="You are an assistant whose job is to help users improve their resumes."),
             message=[prompt]
         )
-        chat._comprehensive_history.append(response)
+        chat._comprehensive_history.append(response) # add chatbot's message
         return response
     
 # TEST STUFF
