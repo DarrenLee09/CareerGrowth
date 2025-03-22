@@ -40,10 +40,10 @@ def login():
 @app.route('/chat', methods=['POST'])
 def send_message():
     data = request.get_json()
-    message = data.get('message')
+    message = data['contents'][0]['parts'][0]['text']
 
     if not message:
-        return jsonify("Please enter a message")
+        return jsonify({"error": "Please enter a message"}), 400
     
     chat = Chatbot()
     response = chat.process_chat(message)

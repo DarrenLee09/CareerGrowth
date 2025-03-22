@@ -4,7 +4,7 @@ from firebase_admin import credentials
 from models.user import User
 
 # Initialize Firebase
-cred = credentials.Certificate("F:\\Honque\\backend\\app\\firebase_key.json") # Change this path to where you store the firebase key 
+cred = credentials.Certificate("D:\\GitHub\\CareerGrowth\\firebase_key.json") # Change this path to where you store the firebase key 
 firebase_admin.initialize_app(cred)
 
 class AuthService:
