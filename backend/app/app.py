@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from models.user import User
 from api.api_v1.endpoints.auth import AuthService
 from flask_cors import CORS
-from util.AI_util import Chatbot
+from api.api_v1.endpoints.AI_util import Chatbot
 
 app = Flask(__name__)
 CORS(app)
@@ -40,13 +40,13 @@ def login():
 @app.route('/chat', methods=['POST'])
 def send_message():
     data = request.get_json()
-    message = data['contents'][0]['parts'][0]['text']
-
-    if not message:
+    content = data.get('content')
+    
+    if not content:
         return jsonify({"error": "Please enter a message"}), 400
     
     chat = Chatbot()
-    response = chat.process_chat(message)
+    response = chat.process_chat(content)
     return jsonify(response)
 
 if __name__ == "__main__":
