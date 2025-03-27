@@ -19,7 +19,6 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState("");
   const { showToast } = useToast();
-  // TODO: chatNessages needs to retrive actual chat data
   const [chatMessages, setChatMessages] = useState<
     Array<{ type: "user" | "assistant"; content: string }>
   >([
@@ -68,28 +67,21 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error("Error sending message");
+        throw new Error(`Error`);
       }
-      let aiResponseData = await response.json();
-      aiResponseData = JSON.parse(aiResponseData);
+
+      const aiResponse = await response.text();
+
       const aiMessage = {
         type: "assistant" as const,
-        content: aiResponseData.candidates[0].content.parts[0].text,
+        content: aiResponse,
       };
       setChatMessages((prev) => [...prev, aiMessage]);
-      // TODO: update conversation history with each message sent and display it
-    } catch (error) {
-      showToast("Could not send message", "error");
-    }
 
-    // TODO: Implement actual AI response
-    /*setTimeout(() => {
-            const aiResponse = {
-                type: 'assistant' as const,
-                content: 'I can help you improve that section. Would you like me to suggest some improvements?'
-            };
-            setChatMessages(prev => [...prev, aiResponse]);
-        }, 1000);*/
+    } catch (error) {
+      console.error('Error sending message:', error);
+      showToast('An error occurred', 'error');
+    }
   };
 
   return (

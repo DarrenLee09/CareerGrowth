@@ -11,7 +11,7 @@ class Chatbot:
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
         self.user_sessions = {} # conversation object, maps user to their respective chat
     
-    def get_chat_session(self, user_id):
+    def get_chat_session(self, user_id): # will be used when auth is integrated
         if user_id not in self.user_sessions:
             self.user_sessions[user_id] = self.client.chats.create(
                 model="gemini-2.0-flash",
@@ -21,16 +21,20 @@ class Chatbot:
         return self.user_sessions[user_id]
     
     @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
-    def process_chat(self, prompt, user_id):
-        chat = self.get_chat_session(user_id)
-        chat._comprehensive_history.append(prompt) # add user's message to the log
+    def process_chat(self, prompt):
+        chat = self.client.chats.create(
+            model="gemini-2.0-flash",
+                history=[]
+        )
+        #chat = self.get_chat_session(user_id)
+        #chat._comprehensive_history.append(prompt) # add user's message to the log
         response = chat.send_message(
             config=types.GenerateContentConfig(
             system_instruction="You are an assistant whose job is to help users improve their resumes."),
             message=[prompt]
         )
-        chat._comprehensive_history.append(response) # add chatbot's message
-        return response
+        #chat._comprehensive_history.append(response) # add chatbot's message
+        return response.text
     
 # TEST STUFF
     

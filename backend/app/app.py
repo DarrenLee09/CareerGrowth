@@ -5,7 +5,7 @@ from flask_cors import CORS
 from api.api_v1.endpoints.AI_util import Chatbot
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}) #replace this with our frontend domain in prod
 
 @app.route('/')
 def hello_world():
