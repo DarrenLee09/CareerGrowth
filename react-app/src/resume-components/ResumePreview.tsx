@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./ResumePreview.module.css";
 import { stringify } from "querystring";
 import { useToast } from "../components/Toast/ToastContext";
-
+import ReactMarkdown from 'react-markdown'
 interface ResumePreviewProps {
   sections: {
     title: string;
@@ -70,7 +70,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({
         throw new Error(`Error`);
       }
 
-      const aiResponse = await response.text();
+      const aiResponse = await response.json();
 
       const aiMessage = {
         type: "assistant" as const,
@@ -158,7 +158,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({
               className={`${styles.message} ${styles[message.type]}`}
             >
               <div className={styles.messageContent}>
-                <p>{message.content}</p>
+                <p><ReactMarkdown>{message.content}</ReactMarkdown></p>
               </div>
             </div>
           ))}

@@ -2,9 +2,10 @@ from firebase_admin import auth
 import firebase_admin
 from firebase_admin import credentials
 from models.user import User
+import os
 
 # Initialize Firebase
-cred = credentials.Certificate("C:\\Users\\affan\\Documents\\GitHub\\CareerGrowth\\firebase_key.json") # Change this path to where you store the firebase key 
+cred = credentials.Certificate(os.getenv("GOOGLE_CREDENTIALS_PATH")) # Change this path to where you store the firebase key 
 firebase_admin.initialize_app(cred)
 
 class AuthService:
