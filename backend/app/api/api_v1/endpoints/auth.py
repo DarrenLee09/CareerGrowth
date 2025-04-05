@@ -1,13 +1,15 @@
 from firebase_admin import auth
 import firebase_admin
 from firebase_admin import credentials
+from models.user import User
+import os
 import smtplib
 
 s = smtplib.SMTP('smtp.gmail.com', 587)
 s.starttls()
 s.login("your_email_here", "app_password_here") # Change this to your email and app password
 # Initialize Firebase
-cred = credentials.Certificate("F:\\Honque\\backend\\app\\firebase_key.json") # Change this path to where you store the firebase key 
+cred = credentials.Certificate(os.getenv("GOOGLE_CREDENTIALS_PATH")) # Change this path to where you store the firebase key 
 firebase_admin.initialize_app(cred)
 
 class AuthService:
